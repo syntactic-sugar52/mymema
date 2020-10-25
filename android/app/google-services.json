@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "400941617441",
+    "firebase_url": "https://mymema-fdeb6.firebaseio.com",
+    "project_id": "mymema-fdeb6",
+    "storage_bucket": "mymema-fdeb6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:400941617441:android:86034e3b5385fac4342e60",
+        "android_client_info": {
+          "package_name": "kd.my_mema"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "400941617441-r12samrddke62hekc4qd92d2ahrequj7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCs-xDMYkHBW9B__Ifg6YpeB3O0M6Kjov0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "400941617441-r12samrddke62hekc4qd92d2ahrequj7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
