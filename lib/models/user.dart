@@ -1,44 +1,49 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Users {
-  final String uid;
-  final String id;
-  final String username;
-  final String email;
-  final String photoUrl;
-  final String displayName;
-  final String status;
-  final String password;
-  final bool isActive;
-  final String groupId;
+  String uid;
+  String username;
+  String email;
+  String photoUrl;
+  String displayName;
+  String status;
+  // String password;
+  // bool isActive;
+  // String groupId;
+  // String messageId;
   Timestamp accountCreated;
-  final String mobile;
-
+  // String mobile;
+  // String id;
+  // String messages;
   Users(
-      {this.id,
-      this.uid,
-      this.groupId,
+      {this.uid,
+      // this.id,
+      // this.messageId,
       this.username,
+      // this.messages,
+      // this.groupId,
       this.email,
       this.photoUrl,
       this.displayName,
       this.accountCreated,
-      this.password,
-      this.isActive,
-      this.mobile,
+      // this.password,
+      // this.isActive,
+      // this.mobile,
       this.status});
 
   factory Users.fromDocument(DocumentSnapshot doc) {
     return Users(
-      id: doc["id"],
+      uid: doc["uid"],
       email: doc["email"],
       username: doc["username"],
       photoUrl: doc["photoUrl"],
       status: doc["status"],
       displayName: doc["displayName"],
-      mobile: doc["mobile"],
-      isActive: doc["isActive"],
-      password: doc["password"],
+      // mobile: doc["mobile"],
+      // isActive: doc["isActive"],
+      // password: doc["password"],
+      // groupId: doc["groupId"],
+      // messageId: doc["messageId"]
     );
   }
 }

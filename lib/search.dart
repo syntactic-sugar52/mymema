@@ -1,52 +1,59 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:my_mema/components/progress.dart';
-import 'package:my_mema/screens/home.dart';
+import 'package:my_mema/screens/root/root.dart';
 import 'package:my_mema/models/user.dart';
-import 'package:my_mema/screens/main_screen.dart';
-import 'package:my_mema/screens/notifications.dart';
+import 'package:my_mema/services/database.dart';
+import 'components/progress.dart';
+import 'package:my_mema/states/current_user.dart';
+import 'package:provider/provider.dart';
 
 class Search extends StatefulWidget {
   @override
   _SearchState createState() => _SearchState();
 }
 
-class _SearchState extends State<Search>
-    with AutomaticKeepAliveClientMixin<Search> {
-  TextEditingController searchController = TextEditingController();
+class _SearchState extends State<Search> {
   Future<QuerySnapshot> searchResultsFuture;
+  TextEditingController _searchController = TextEditingController();
+  String searchKey;
+  Stream streamQuery;
 
   handleSearch(String query) {
-    Future<QuerySnapshot> users =
-        usersRef.where("displayName", isGreaterThanOrEqualTo: query).get();
+    Future<QuerySnapshot> users = FirebaseFirestore.instance
+        .collection("users")
+        .where("displayName", isGreaterThanOrEqualTo: query)
+        // .where('userName', isLessThan: query + 'z')
+        .get();
     setState(() {
       searchResultsFuture = users;
     });
   }
 
   clearSearch() {
-    searchController.clear();
+    _searchController.clear();
   }
 
   AppBar buildSearchField() {
     return AppBar(
-      automaticallyImplyLeading: false,
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black87,
       title: TextFormField(
-        controller: searchController,
+        controller: _searchController,
         decoration: InputDecoration(
-          hintText: "Search",
-          filled: true,
-          suffixIcon: IconButton(
-            icon: Icon(Icons.clear),
-            onPressed: clearSearch,
-          ),
-        ),
+            fillColor: Colors.white,
+            hintText: "Search",
+            filled: true,
+            prefixIcon: Icon(
+              Icons.search,
+              size: 20.0,
+            ),
+            suffixIcon: IconButton(
+              icon: Icon(Icons.clear),
+              onPressed: () => clearSearch(),
+            )),
         onFieldSubmitted: handleSearch,
       ),
     );
@@ -56,53 +63,71 @@ class _SearchState extends State<Search>
     final Orientation orientation = MediaQuery.of(context).orientation;
     return Container(
       child: Center(
-        child: ListView(
-          shrinkWrap: true,
-          children: [
-            SvgPicture.asset(
-              'assets/search.svg',
-              height: orientation == Orientation.portrait ? 300.0 : 200.0,
-            ),
-            Text(
-              "Find Users",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 60.0),
-            )
-          ],
-        ),
+        child: ListView(children: [
+          Text(
+            "no content",
+            textAlign: TextAlign.center,
+          )
+        ]),
+      ),
+    );
+  }
+
+  Widget _buildList(BuildContext context, DocumentSnapshot document) {
+    return GestureDetector(
+      onTap: () => print('tapped'),
+      child: ListTile(
+        leading: CircleAvatar(),
+        title: Text(document['displayName']),
+        subtitle: Text(document['userName']),
       ),
     );
   }
 
   buildSearchResults() {
     return FutureBuilder(
-        future: searchResultsFuture,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return circularProgress();
-          }
-          List<UserResult> searchResults = [];
-          snapshot.data.documents.forEach((doc) {
-            Users user = Users.fromDocument(doc);
-            UserResult searchResult = UserResult(user);
-            searchResults.add(searchResult);
-          });
-          return ListView(
-            children: searchResults,
+      future: searchResultsFuture,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return circularProgress();
+        }
+        List<UserResult> searchResuts = [];
+        snapshot.data.documents.forEach((doc) {
+          Users user = Users.fromDocument(doc);
+          UserResult userResult = UserResult(
+            user: user,
           );
+          searchResuts.add(userResult);
         });
+        return ListView(
+          children: searchResuts,
+        );
+      },
+    );
   }
+  //
+  // buildSearchResults() {
+  //   return StreamBuilder(
+  //       stream: FirebaseFirestore.instance
+  //           .collection("users")
+  //           .where("userName")
+  //           .snapshots(),
+  //       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+  //         if (!snapshot.hasData) {
+  //           return circularProgress();
+  //         }
+  //         return ListView.builder(
+  //           itemBuilder: (context, index) =>
+  //               _buildList(context, snapshot.data.docs[index]),
+  //           itemCount: snapshot.data.docs.length,
+  //         );
+  //       });
+  // }
 
-  bool get wantKeepAlive => true;
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Scaffold(
-      // backgroundColor: Theme.of(context).primaryColor.withOpacity(0.8),
-      // backgroundColor: Colors.purple,
+      backgroundColor: Colors.white,
       appBar: buildSearchField(),
       body:
           searchResultsFuture == null ? buildNoContent() : buildSearchResults(),
@@ -111,29 +136,31 @@ class _SearchState extends State<Search>
 }
 
 class UserResult extends StatelessWidget {
-  final Users users;
-  UserResult(this.users);
-
+  final Users user;
+  final Widget buildTile;
+  UserResult({this.user, this.buildTile});
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.white54,
       child: Column(
         children: [
           GestureDetector(
-            onTap: () => showProfile(context, profileId: users.id),
+            onTap: () => print("ontap"),
             child: ListTile(
               leading: CircleAvatar(
                 backgroundColor: Colors.grey,
-                backgroundImage: CachedNetworkImageProvider(users.photoUrl),
+                backgroundImage: CachedNetworkImageProvider(user.photoUrl),
               ),
               title: Text(
-                users.displayName,
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                user.displayName,
+                style: TextStyle(
+                    color: Colors.black87, fontWeight: FontWeight.bold),
               ),
               subtitle: Text(
-                users.username,
-                style: TextStyle(color: Colors.black),
+                user.username,
+                style: TextStyle(
+                    color: Colors.black87, fontWeight: FontWeight.bold),
               ),
             ),
           ),

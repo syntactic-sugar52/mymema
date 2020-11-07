@@ -1,153 +1,88 @@
-import 'package:flutter/material.dart';
-import 'package:my_mema/components/chat_item.dart';
-import 'package:my_mema/util/data.dart';
-
-class Chats extends StatefulWidget {
-  @override
-  _ChatsState createState() => _ChatsState();
-}
-
-class _ChatsState extends State<Chats>
-    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-  TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(vsync: this, initialIndex: 0, length: 3);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: TextField(
-          decoration: InputDecoration.collapsed(
-            hintText: 'Search',
-          ),
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.filter_list,
-            ),
-            onPressed: () {},
-          ),
-        ],
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: Color(0xff6886c5),
-          indicatorSize: TabBarIndicatorSize.label,
-          labelColor: Colors.black,
-          unselectedLabelColor: Theme.of(context).textTheme.caption.color,
-          isScrollable: false,
-          tabs: <Widget>[
-            Tab(
-              text: "Message",
-            ),
-            Tab(
-              text: "Teams",
-            ),
-            Tab(
-              text: "Deal Request",
-            )
-          ],
-        ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: <Widget>[
-          ListView.separated(
-            padding: EdgeInsets.all(10),
-            separatorBuilder: (BuildContext context, int index) {
-              return Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  height: 0.5,
-                  width: MediaQuery.of(context).size.width / 1.3,
-                  child: Divider(),
-                ),
-              );
-            },
-            itemCount: chats.length,
-            itemBuilder: (BuildContext context, int index) {
-              Map chat = chats[index];
-              return ChatItem(
-                dp: chat['dp'],
-                name: chat['name'],
-                isOnline: chat['isOnline'],
-                counter: chat['counter'],
-                msg: chat['msg'],
-                time: chat['time'],
-              );
-            },
-          ),
-          ListView.separated(
-            padding: EdgeInsets.all(10),
-            separatorBuilder: (BuildContext context, int index) {
-              return Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  height: 0.5,
-                  width: MediaQuery.of(context).size.width / 1.3,
-                  child: Divider(),
-                ),
-              );
-            },
-            itemCount: groups.length,
-            itemBuilder: (BuildContext context, int index) {
-              Map chat = groups[index];
-              return ChatItem(
-                dp: chat['dp'],
-                name: chat['name'],
-                isOnline: chat['isOnline'],
-                counter: chat['counter'],
-                msg: chat['msg'],
-                time: chat['time'],
-              );
-            },
-          ),
-          ListView.separated(
-            padding: EdgeInsets.all(10),
-            separatorBuilder: (BuildContext context, int index) {
-              return Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  height: 0.5,
-                  width: MediaQuery.of(context).size.width / 1.3,
-                  child: Divider(),
-                ),
-              );
-            },
-            itemCount: groups.length,
-            itemBuilder: (BuildContext context, int index) {
-              Map chat = groups[index];
-              return ChatItem(
-                dp: chat['dp'],
-                name: chat['name'],
-                isOnline: chat['isOnline'],
-                counter: chat['counter'],
-                msg: chat['msg'],
-                time: chat['time'],
-              );
-            },
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        heroTag: "chatbtn",
-        backgroundColor: Color(0xff6886c5),
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-        onPressed: () {},
-      ),
-    );
-  }
-
-  @override
-  bool get wantKeepAlive => true;
-}
+// import 'package:flutter/material.dart';
+// import 'package:my_mema/components/chat_item.dart';
+// import 'package:my_mema/screens/chat/deal_request.dart';
+// import 'package:my_mema/screens/chat/direct_message.dart';
+// import 'package:my_mema/screens/chat/teams.dart';
+// import 'package:my_mema/util/data.dart';
+// import 'package:my_mema/states/current_user.dart';
+// import 'package:my_mema/states/currentTeam.dart';
+// import 'package:provider/provider.dart';
+//
+// class Chats extends StatefulWidget {
+//   @override
+//   _ChatsState createState() => _ChatsState();
+// }
+//
+// class _ChatsState extends State<Chats>
+//     with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+//   TabController _tabController;
+//
+//   @override
+//   void initState() {
+//     // TODO: implement initState
+//     super.initState();
+//     _tabController = TabController(vsync: this, initialIndex: 0, length: 3);
+//     // CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
+//     // CurrentTeam _currentTeam = Provider.of<CurrentTeam>(context, listen: false);
+//     // _currentTeam.updateStateFromDatabase(_currentUser.getCurrentUser.groupId);
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     super.build(context);
+//     return Scaffold(
+//       appBar: AppBar(
+//         backgroundColor: Colors.white,
+//         automaticallyImplyLeading: false,
+//         title: TextField(
+//           decoration: InputDecoration.collapsed(
+//             hintText: 'Search',
+//           ),
+//         ),
+//         actions: <Widget>[
+//           IconButton(
+//             icon: Icon(
+//               Icons.filter_list,
+//             ),
+//             onPressed: () {},
+//           ),
+//         ],
+//         bottom: TabBar(
+//           controller: _tabController,
+//           indicatorColor: Color(0xff6886c5),
+//           indicatorSize: TabBarIndicatorSize.label,
+//           labelColor: Colors.black,
+//           unselectedLabelColor: Theme.of(context).textTheme.caption.color,
+//           isScrollable: false,
+//           tabs: <Widget>[
+//             Tab(
+//               text: "Message",
+//             ),
+//             Tab(
+//               text: "Teams",
+//             ),
+//             Tab(
+//               text: "Deal Request",
+//             )
+//           ],
+//         ),
+//       ),
+//       body: TabBarView(
+//         controller: _tabController,
+//         children: <Widget>[DirectMessage(), Teams(), DealRequest()],
+//       ),
+//       // floatingActionButton: FloatingActionButton(
+//       //   heroTag: "chatbtn",
+//       //   backgroundColor: Color(0xff6886c5),
+//       //   child: Icon(
+//       //     Icons.add,
+//       //     color: Colors.white,
+//       //   ),
+//       //   onPressed: () {},
+//       // ),
+//     );
+//   }
+//
+//   @override
+//   bool get wantKeepAlive => true;
+// }

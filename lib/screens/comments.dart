@@ -1,10 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_mema/components/progress.dart';
-import 'main_screen.dart';
-import 'package:timeago/timeago.dart' as timeago;
 import 'package:my_mema/components/post_item.dart';
 
 class Comments extends StatefulWidget {
@@ -28,51 +25,51 @@ class _CommentsState extends State<Comments> {
 
   _CommentsState({this.postId, this.postOwnerId, this.postMediaUrl});
 
-  buildComments() {
-    return StreamBuilder(
-      stream: commentsRef
-          .doc(postId)
-          .collection('comments')
-          .orderBy("timestamp", descending: true)
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return circularProgress();
-        }
-        List<Comment> comments = [];
-        snapshot.data.documents.forEach((doc) {
-          comments.add(Comment.fromDocument(doc));
-        });
-        return ListView(
-          children: comments,
-        );
-      },
-    );
-  }
+  // buildComments() {
+  //   return StreamBuilder(
+  //     stream: commentsRef
+  //         .doc(postId)
+  //         .collection('comments')
+  //         .orderBy("timestamp", descending: true)
+  //         .snapshots(),
+  //     builder: (context, snapshot) {
+  //       if (!snapshot.hasData) {
+  //         return circularProgress();
+  //       }
+  //       List<Comment> comments = [];
+  //       snapshot.data.documents.forEach((doc) {
+  //         comments.add(Comment.fromDocument(doc));
+  //       });
+  //       return ListView(
+  //         children: comments,
+  //       );
+  //     },
+  //   );
+  // }
 
-  addComments() {
-    commentsRef.doc(postId).collection("comments").add({
-      "username": currentUser.username,
-      "comment": commentController.text,
-      "timestamp": timestamp,
-      "avatarUrl": currentUser.photoUrl,
-      "userId": currentUser.id
-    });
-    bool isNotPostOwner = postOwnerId != currentUser.id;
-    if (isNotPostOwner) {
-      activityFeedRef.doc(postOwnerId).collection('feedItems').add({
-        "type": "comment",
-        "commentData": commentController.text,
-        "timestamp": timestamp,
-        "postId": postId,
-        "username": currentUser.username,
-        "userId": currentUser.id,
-        "userProfileImg": currentUser.photoUrl,
-        "mediaUrl": postMediaUrl,
-      });
-    }
-    commentController.clear();
-  }
+  // addComments() {
+  //   commentsRef.doc(postId).collection("comments").add({
+  //     "username": currentUser.username,
+  //     "comment": commentController.text,
+  //     "timestamp": timestamp,
+  //     "avatarUrl": currentUser.photoUrl,
+  //     "userId": currentUser.id
+  //   });
+  //   bool isNotPostOwner = postOwnerId != currentUser.id;
+  //   if (isNotPostOwner) {
+  //     activityFeedRef.doc(postOwnerId).collection('feedItems').add({
+  //       "type": "comment",
+  //       "commentData": commentController.text,
+  //       "timestamp": timestamp,
+  //       "postId": postId,
+  //       "username": currentUser.username,
+  //       "userId": currentUser.id,
+  //       "userProfileImg": currentUser.photoUrl,
+  //       "mediaUrl": postMediaUrl,
+  //     });
+  //   }
+  //   commentController.clear();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +80,7 @@ class _CommentsState extends State<Comments> {
       body: Column(
         children: [
           Expanded(
-            child: buildComments(),
+            child: Text("comments"),
           ),
           Divider(),
           ListTile(
@@ -92,7 +89,7 @@ class _CommentsState extends State<Comments> {
               decoration: InputDecoration(labelText: "Write a comment"),
             ),
             trailing: OutlineButton(
-              onPressed: addComments,
+              onPressed: () {},
               borderSide: BorderSide.none,
               child: Text("Post"),
             ),
@@ -132,9 +129,9 @@ class Comment extends StatelessWidget {
         ListTile(
           title: Text(comment),
           leading: CircleAvatar(
-            backgroundImage: CachedNetworkImageProvider(avatarUrl),
-          ),
-          subtitle: Text(timeago.format(timestamp.toDate())),
+              // backgroundImage: CachedNetworkImageProvider(avatarUrl),
+              ),
+          // subtitle: Text(timeago.format(timestamp.toDate())),
         ),
         Divider()
       ],

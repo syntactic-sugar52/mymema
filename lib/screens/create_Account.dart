@@ -12,7 +12,7 @@ class _CreateAccountState extends State<CreateAccount> {
   final _formKey = GlobalKey<FormState>();
   String username;
 
-  submit() {
+  void submit() {
     final form = _formKey.currentState;
     if (form.validate()) {
       form.save();
@@ -21,7 +21,7 @@ class _CreateAccountState extends State<CreateAccount> {
       );
       _scaffoldKey.currentState.showSnackBar(snackbar);
       Timer(Duration(seconds: 2), () {
-        Navigator.pop(context, username);
+        Navigator.of(context, rootNavigator: true).pop(username);
       });
     }
   }
@@ -31,6 +31,7 @@ class _CreateAccountState extends State<CreateAccount> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text("Set up you profile."),
       ),
       body: Center(
@@ -45,9 +46,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       child: Center(
                         child: Text(
                           "Create a Username",
-                          style: TextStyle(
-                            fontSize: 25.0,
-                          ),
+                          style: TextStyle(fontSize: 25.0, color: Colors.white),
                         ),
                       ),
                     ),
@@ -58,7 +57,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       child: Form(
                         key: _formKey,
                         child: TextFormField(
-                          // autovalidateMode: ,
+                          autovalidateMode: AutovalidateMode.always,
                           validator: (val) {
                             if (val.trim().length < 3 || val.isEmpty) {
                               return "Username too short.";
@@ -85,7 +84,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       height: 50.0,
                       width: 350.0,
                       decoration: BoxDecoration(
-                        color: Colors.blue,
+                        color: Colors.black87,
                         borderRadius: BorderRadius.circular(7.0),
                       ),
                       child: Center(

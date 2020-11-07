@@ -1,9 +1,10 @@
 import 'dart:math';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_mema/components/chat_bubble.dart';
 import 'package:my_mema/util/data.dart';
-// import 'package:social_app_ui/util/data.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Conversation extends StatefulWidget {
   @override
@@ -13,7 +14,9 @@ class Conversation extends StatefulWidget {
 class _ConversationState extends State<Conversation> {
   static Random random = Random();
   String name = names[random.nextInt(10)];
-
+  final _auth = FirebaseAuth.instance;
+  User loggedInUser;
+  String messageText;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

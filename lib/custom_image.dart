@@ -1,14 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-
-Widget cachedNetworkImage(mediaUrl) {
-  return CachedNetworkImage(
-    imageUrl: mediaUrl,
-    fit: BoxFit.cover,
-    placeholder: (context, url) => Padding(
-      child: CircularProgressIndicator(),
-      padding: EdgeInsets.all(20.0),
-    ),
-    errorWidget: (context, url, error) => Icon(Icons.error),
-  );
-}
+// import 'package:flutter/cupertino.dart';
+// import 'package:flutter/services.dart';
+// import 'package:my_mema/models/user.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
+// import 'package:my_mema/services/database.dart';
+// import 'package:provider/provider.dart';
+// import 'package:flutter/cupertino.dart';
+//
+// class CurrentUser extends ChangeNotifier {
+//   Users _currentUse
